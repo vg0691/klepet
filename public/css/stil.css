@@ -57,3 +57,14 @@ a {
 #pomoc {
   font: 10px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
+
+iframe {
+  width: 200px;
+  height: 150px;
+  padding-left: 20px;
+  
+  /*spodnji trije stili dodani zato, da je okvir posnetka lep in nima nic odvecnih crt*/
+  border-left-width: 0px;  
+  border-bottom-width: 0px;
+  border-top-width: 0px;
+}

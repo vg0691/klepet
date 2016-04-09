@@ -23,10 +23,21 @@ function procesirajVnosUporabnika(klepetApp, socket) {
       $('#sporocila').append(divElementHtmlTekst(sistemskoSporocilo));
     }
   } else {
-    sporocilo = filtirirajVulgarneBesede(sporocilo);
-    klepetApp.posljiSporocilo(trenutniKanal, sporocilo);
-    $('#sporocila').append(divElementEnostavniTekst(sporocilo));
-    $('#sporocila').scrollTop($('#sporocila').prop('scrollHeight'));
+    if (sporocilo.indexOf('https://www.youtube.com/watch?v=')==0) {
+     klepetApp.posljiSporocilo(trenutniKanal, sporocilo);
+      $('#sporocila').append(divElementEnostavniTekst(sporocilo));
+      $('#sporocila').scrollTop($('#sporocila').prop('scrollHeight'));
+      
+      var video = sporocilo.substr(sporocilo.indexOf('v=') + 2, sporocilo.length); //najde ta v= v http 
+      //naslovu in preskoci ta dva znaka in vzame ven tist string, ki potem sledi
+      $('#sporocila').append('<iframe src="https://www.youtube.com/embed/' + video + '" allowfullscreen></iframe>');
+      
+    } else {
+      sporocilo = filtirirajVulgarneBesede(sporocilo);
+      klepetApp.posljiSporocilo(trenutniKanal, sporocilo);
+      $('#sporocila').append(divElementEnostavniTekst(sporocilo));
+      $('#sporocila').scrollTop($('#sporocila').prop('scrollHeight'));
+    }
   }
 
   $('#poslji-sporocilo').val('');
@@ -74,8 +85,17 @@ $(document).ready(function() {
   });
 
   socket.on('sporocilo', function (sporocilo) {
-    var novElement = divElementEnostavniTekst(sporocilo.besedilo);
-    $('#sporocila').append(novElement);
+    sporocilo = sporocilo.besedilo;
+    if (sporocilo.indexOf('https://www.youtube.com/watch?v=')>-1) {
+      $('#sporocila').append(divElementEnostavniTekst(sporocilo));
+      
+      var video = sporocilo.substr(sporocilo.indexOf('v=') + 2, sporocilo.length); //najde ta v= v http 
+      //naslovu in preskoci ta dva znaka in vzame ven tist string, ki potem sledi
+      $('#sporocila').append('<iframe src="https://www.youtube.com/embed/' + video + '" allowfullscreen></iframe>');
+      
+    } else {
+      $('#sporocila').append(divElementEnostavniTekst(sporocilo));
+    }
   });
   
   socket.on('kanali', function(kanali) {
