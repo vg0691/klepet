@@ -1,11 +1,16 @@
-function divElementEnostavniTekst(sporocilo) {
+//var pobarvaniUporabniki = [];
+
+function divElementEnostavniTekst(sporocilo, barva) {
   var jeSmesko = sporocilo.indexOf('http://sandbox.lavbic.net/teaching/OIS/gradivo/') > -1;
   if (jeSmesko) {
     sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace('&lt;img', '<img').replace('png\' /&gt;', 'png\' />');
     return $('<div style="font-weight: bold"></div>').html(sporocilo);
-  } else {
+  } /*else if(barva) {
+    return $('<div style="font-weight: bold; background-color: #ddd;"></div>').text(sporocilo);
+  }*/ else {
     return $('<div style="font-weight: bold;"></div>').text(sporocilo);
   }
+  
 }
 
 function divElementHtmlTekst(sporocilo) {
@@ -97,12 +102,21 @@ $(document).ready(function() {
   socket.on('uporabniki', function(uporabniki) {
     $('#seznam-uporabnikov').empty();
     for (var i=0; i < uporabniki.length; i++) {
-      $('#seznam-uporabnikov').append(divElementEnostavniTekst(uporabniki[i]));
+      /*if (pobarvaniUporabniki.indexOf(uporabniki[i]) > -1) {
+        $('#seznam-uporabnikov').append(divElementEnostavniTekst(uporabniki[i], true));
+      } else {*/
+        $('#seznam-uporabnikov').append(divElementEnostavniTekst(uporabniki[i]));
+      //}
     }
+    
     $('#seznam-uporabnikov div').click(function() {
        var klik = $(this).text();
         //alert(klik);
-        $('#poslji-sporocilo').val('/zasebno' + ' ' + '"' + klik + '"');
+        //pobarvaniUporabniki = [];
+        //pobarvaniUporabniki.push(klik);
+        $('#poslji-sporocilo').val('/zasebno' + ' ' + '"' + klik + '"' + ' ');
+        $('#poslji-sporocilo').focus();
+        $(this).css("background-color", "#ddd");
         
     });
   });
