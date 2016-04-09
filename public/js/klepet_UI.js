@@ -23,10 +23,20 @@ function procesirajVnosUporabnika(klepetApp, socket) {
       $('#sporocila').append(divElementHtmlTekst(sistemskoSporocilo));
     }
   } else {
-    sporocilo = filtirirajVulgarneBesede(sporocilo);
-    klepetApp.posljiSporocilo(trenutniKanal, sporocilo);
-    $('#sporocila').append(divElementEnostavniTekst(sporocilo));
-    $('#sporocila').scrollTop($('#sporocila').prop('scrollHeight'));
+    if ((sporocilo.indexOf('http://')==0 || sporocilo.indexOf('https://')==0) && (sporocilo.indexOf('.jpg')>0 || 
+        sporocilo.indexOf('.png')>0) || sporocilo.indexOf('.gif')>0) {
+     klepetApp.posljiSporocilo(trenutniKanal, sporocilo);
+      $('#sporocila').append(divElementEnostavniTekst(sporocilo));
+      $('#sporocila').scrollTop($('#sporocila').prop('scrollHeight'));
+      
+      $('#sporocila').append('<img src="'+ sporocilo + '">');
+      
+    } else {
+      sporocilo = filtirirajVulgarneBesede(sporocilo);
+      klepetApp.posljiSporocilo(trenutniKanal, sporocilo);
+      $('#sporocila').append(divElementEnostavniTekst(sporocilo));
+      $('#sporocila').scrollTop($('#sporocila').prop('scrollHeight'));
+    }
   }
 
   $('#poslji-sporocilo').val('');
@@ -74,8 +84,22 @@ $(document).ready(function() {
   });
 
   socket.on('sporocilo', function (sporocilo) {
-    var novElement = divElementEnostavniTekst(sporocilo.besedilo);
-    $('#sporocila').append(novElement);
+    sporocilo = sporocilo.besedilo;
+    if ((sporocilo.indexOf('http://')>0 || sporocilo.indexOf('https://')>0) && (sporocilo.indexOf('.jpg')>0 || 
+        sporocilo.indexOf('.png')>0) || sporocilo.indexOf('.gif')>0) {
+      
+      $('#sporocila').append(divElementEnostavniTekst(sporocilo));
+      
+      if (sporocilo.indexOf('http://') > -1) { //ce je v linku http...
+        sporocilo = sporocilo.substr(sporocilo.indexOf('http://'), sporocilo.length); //vzame stran vzdevek
+      } else { //ce je v linku https...
+        sporocilo = sporocilo.substr(sporocilo.indexOf('https://'), sporocilo.length); //vzame stran vzdevek
+      }
+      $('#sporocila').append('<img src="'+ sporocilo + '">');
+      
+    } else {
+      $('#sporocila').append(divElementEnostavniTekst(sporocilo));
+    }
   });
   
   socket.on('kanali', function(kanali) {

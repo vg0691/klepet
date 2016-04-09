@@ -44,7 +44,16 @@ a {
   cursor: pointer;
 }
 
+#seznam-uporabnikov div {
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
 #seznam-kanalov div:hover {
+  background-color: #ddd;
+}
+
+#seznam-uporabnikov div:hover {
   background-color: #ddd;
 }
 
@@ -56,4 +65,9 @@ a {
 
 #pomoc {
   font: 10px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+img  {     /*vsi img elementi imajo te lastnosti*/
+  width: 200px;
+  padding-left: 20px;
 }
