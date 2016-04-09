@@ -31,7 +31,7 @@ function procesirajVnosUporabnika(klepetApp, socket) {
 
   $('#poslji-sporocilo').val('');
 }
-
+  
 var socket = io.connect();
 var trenutniVzdevek = "", trenutniKanal = "";
 
@@ -87,7 +87,7 @@ $(document).ready(function() {
         $('#seznam-kanalov').append(divElementEnostavniTekst(kanal));
       }
     }
-
+  
     $('#seznam-kanalov div').click(function() {
       klepetApp.procesirajUkaz('/pridruzitev ' + $(this).text());
       $('#poslji-sporocilo').focus();
@@ -99,7 +99,15 @@ $(document).ready(function() {
     for (var i=0; i < uporabniki.length; i++) {
       $('#seznam-uporabnikov').append(divElementEnostavniTekst(uporabniki[i]));
     }
+    $('#seznam-uporabnikov div').click(function() {
+       var klik = $(this).text();
+        //alert(klik);
+        $('#poslji-sporocilo').val('/zasebno' + ' ' + '"' + klik + '"');
+        
+    });
   });
+  
+  //$('seznam-uporabnikov').css('cursor','crosshair');
 
   setInterval(function() {
     socket.emit('kanali');
