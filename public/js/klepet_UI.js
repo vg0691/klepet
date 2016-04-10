@@ -23,20 +23,20 @@ function procesirajVnosUporabnika(klepetApp, socket) {
       $('#sporocila').append(divElementHtmlTekst(sistemskoSporocilo));
     }
   } else {
-    if (sporocilo.indexOf('https://www.youtube.com/watch?v=')==0) {
-     klepetApp.posljiSporocilo(trenutniKanal, sporocilo);
-      $('#sporocila').append(divElementEnostavniTekst(sporocilo));
-      $('#sporocila').scrollTop($('#sporocila').prop('scrollHeight'));
-      
-      var video = sporocilo.substr(sporocilo.indexOf('v=') + 2, sporocilo.length); //najde ta v= v http 
-      //naslovu in preskoci ta dva znaka in vzame ven tist string, ki potem sledi
-      $('#sporocila').append('<iframe src="https://www.youtube.com/embed/' + video + '" allowfullscreen></iframe>');
-      
-    } else {
+    var sporocila = sporocilo.split(" ");
+    
       sporocilo = filtirirajVulgarneBesede(sporocilo);
       klepetApp.posljiSporocilo(trenutniKanal, sporocilo);
       $('#sporocila').append(divElementEnostavniTekst(sporocilo));
       $('#sporocila').scrollTop($('#sporocila').prop('scrollHeight'));
+      
+    for (var i=0; i<sporocila.length;i++) {
+      sporocilo = sporocila[i];
+      if (sporocilo.indexOf('https://www.youtube.com/watch?v=')==0) {
+        var video = sporocilo.substr(sporocilo.indexOf('v=') + 2, sporocilo.length); //najde ta v= v http 
+        //naslovu in preskoci ta dva znaka in vzame ven tist string, ki potem sledi
+        $('#sporocila').append('<iframe src="https://www.youtube.com/embed/' + video + '" allowfullscreen></iframe>');
+      }
     }
   }
 
@@ -86,15 +86,20 @@ $(document).ready(function() {
 
   socket.on('sporocilo', function (sporocilo) {
     sporocilo = sporocilo.besedilo;
-    if (sporocilo.indexOf('https://www.youtube.com/watch?v=')>-1) {
+    var sporocila = sporocilo.split(" ");
+    //var koncnoSporocilo = sporocilo;
+    
+      sporocilo = filtirirajVulgarneBesede(sporocilo);
       $('#sporocila').append(divElementEnostavniTekst(sporocilo));
+      $('#sporocila').scrollTop($('#sporocila').prop('scrollHeight'));
       
-      var video = sporocilo.substr(sporocilo.indexOf('v=') + 2, sporocilo.length); //najde ta v= v http 
-      //naslovu in preskoci ta dva znaka in vzame ven tist string, ki potem sledi
-      $('#sporocila').append('<iframe src="https://www.youtube.com/embed/' + video + '" allowfullscreen></iframe>');
-      
-    } else {
-      $('#sporocila').append(divElementEnostavniTekst(sporocilo));
+    for (var i=0; i<sporocila.length;i++) {
+      sporocilo = sporocila[i];
+      if (sporocilo.indexOf('https://www.youtube.com/watch?v=')==0) {
+        var video = sporocilo.substr(sporocilo.indexOf('v=') + 2, sporocilo.length); //najde ta v= v http 
+        //naslovu in preskoci ta dva znaka in vzame ven tist string, ki potem sledi
+        $('#sporocila').append('<iframe src="https://www.youtube.com/embed/' + video + '" allowfullscreen></iframe>');
+      }
     }
   });
   
