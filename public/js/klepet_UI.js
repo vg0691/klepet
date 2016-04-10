@@ -26,17 +26,20 @@ function procesirajVnosUporabnika(klepetApp, socket) {
     sporocila = sporocilo.split(" ");
     $('#sporocila').append(divElementEnostavniTekst(sporocilo));
     var koncnoSporocilo = sporocilo;
+    
+      sporocilo = filtirirajVulgarneBesede(sporocilo);
+      klepetApp.posljiSporocilo(trenutniKanal, sporocilo);
+      $('#sporocila').append(divElementEnostavniTekst(sporocilo));
+      $('#sporocila').scrollTop($('#sporocila').prop('scrollHeight'));
+      
     for (var i=0; i<sporocila.length; i++) {
       sporocilo = sporocila[i];
       if ((sporocilo.indexOf('http://')==0 || sporocilo.indexOf('https://')==0) && (sporocilo.indexOf('.jpg')>0 || 
           sporocilo.indexOf('.png')>0) || sporocilo.indexOf('.gif')>0) {
-       
         $('#sporocila').scrollTop($('#sporocila').prop('scrollHeight'));
-        
         $('#sporocila').append('<img src="'+ sporocilo + '">');
       } 
     }
-    klepetApp.posljiSporocilo(trenutniKanal, koncnoSporocilo);
   }
 
   $('#poslji-sporocilo').val('');
