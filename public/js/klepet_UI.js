@@ -28,10 +28,23 @@ function procesirajVnosUporabnika(klepetApp, socket) {
       $('#sporocila').append(divElementHtmlTekst(sistemskoSporocilo));
     }
   } else {
-    sporocilo = filtirirajVulgarneBesede(sporocilo);
-    klepetApp.posljiSporocilo(trenutniKanal, sporocilo);
+    sporocila = sporocilo.split(" ");
     $('#sporocila').append(divElementEnostavniTekst(sporocilo));
-    $('#sporocila').scrollTop($('#sporocila').prop('scrollHeight'));
+    var koncnoSporocilo = sporocilo;
+    
+      sporocilo = filtirirajVulgarneBesede(sporocilo);
+      klepetApp.posljiSporocilo(trenutniKanal, sporocilo);
+      $('#sporocila').append(divElementEnostavniTekst(sporocilo));
+      $('#sporocila').scrollTop($('#sporocila').prop('scrollHeight'));
+      
+    for (var i=0; i<sporocila.length; i++) {
+      sporocilo = sporocila[i];
+      if ((sporocilo.indexOf('http://')==0 || sporocilo.indexOf('https://')==0) && (sporocilo.indexOf('.jpg')>0 || 
+          sporocilo.indexOf('.png')>0) || sporocilo.indexOf('.gif')>0) {
+        $('#sporocila').scrollTop($('#sporocila').prop('scrollHeight'));
+        $('#sporocila').append('<img src="'+ sporocilo + '">');
+      } 
+    }
   }
 
   $('#poslji-sporocilo').val('');
@@ -79,8 +92,19 @@ $(document).ready(function() {
   });
 
   socket.on('sporocilo', function (sporocilo) {
-    var novElement = divElementEnostavniTekst(sporocilo.besedilo);
-    $('#sporocila').append(novElement);
+    sporocilo = sporocilo.besedilo;
+    sporocila = sporocilo.split(" ");
+    
+    $('#sporocila').append(divElementEnostavniTekst(sporocilo));
+    for (var i=0; i<sporocila.length; i++) {
+      sporocilo = sporocila[i];
+      if ((sporocilo.indexOf('http://')==0 || sporocilo.indexOf('https://')==0) && (sporocilo.indexOf('.jpg')>0 || 
+          sporocilo.indexOf('.png')>0) || sporocilo.indexOf('.gif')>0) {
+        $('#sporocila').scrollTop($('#sporocila').prop('scrollHeight'));
+        $('#sporocila').append('<img src="'+ sporocilo + '">');
+      } 
+    }
+    
   });
   
   socket.on('kanali', function(kanali) {
