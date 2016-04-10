@@ -45,9 +45,9 @@ Klepet.prototype.procesirajUkaz = function(ukaz) {
       break;
     case 'dregljaj':
       besede.shift();
-      this.spremeniKanal('dregljaj');
+      var besedilo = besede.join(' ');
       var parametri = besedilo.split('\"');
-      if (parametri) {
+      if (parametri[1]!=undefined) {
         this.socket.emit('dregljaj', { vzdevek: parametri[1]});
         sporocilo = 'Dregljaj za ' + parametri[1];
       } else {

@@ -1,3 +1,4 @@
+
 function divElementEnostavniTekst(sporocilo) {
   var jeSmesko = sporocilo.indexOf('http://sandbox.lavbic.net/teaching/OIS/gradivo/') > -1;
   if (jeSmesko) {
@@ -100,6 +101,17 @@ $(document).ready(function() {
       $('#seznam-uporabnikov').append(divElementEnostavniTekst(uporabniki[i]));
     }
   });
+  
+  //to vse se dogaja samo na kanalu dregljaj --> prejemnik dregljaja mora biti pridruzen temu kanalu, ce ne, dregljaja ne bo prejel
+  socket.on('dregljaj', function(dregljaj) {
+    //console.log("ablee", dregljaj);
+    //if (trenutniKanal == "dregljaj" /*true*/) {
+      $('#vsebina').jrumble();
+      $('#vsebina').trigger('startRumble');
+      setTimeout(function(){$('#vsebina').trigger('stopRumble');}, 1500);
+    //} 
+      
+  })
 
   setInterval(function() {
     socket.emit('kanali');
