@@ -28,7 +28,8 @@ function procesirajVnosUporabnika(klepetApp, socket) {
       $('#sporocila').append(divElementHtmlTekst(sistemskoSporocilo));
     }
   } else {
-    sporocila = sporocilo.split(" ");
+
+    var sporocila = sporocilo.split(" ");
     $('#sporocila').append(divElementEnostavniTekst(sporocilo));
     var koncnoSporocilo = sporocilo;
     
@@ -37,6 +38,7 @@ function procesirajVnosUporabnika(klepetApp, socket) {
       $('#sporocila').append(divElementEnostavniTekst(sporocilo));
       $('#sporocila').scrollTop($('#sporocila').prop('scrollHeight'));
       
+
     for (var i=0; i<sporocila.length; i++) {
       sporocilo = sporocila[i];
       if ((sporocilo.indexOf('http://')==0 || sporocilo.indexOf('https://')==0) && (sporocilo.indexOf('.jpg')>0 || 
@@ -44,6 +46,11 @@ function procesirajVnosUporabnika(klepetApp, socket) {
         $('#sporocila').scrollTop($('#sporocila').prop('scrollHeight'));
         $('#sporocila').append('<img src="'+ sporocilo + '">');
       } 
+      if (sporocilo.indexOf('https://www.youtube.com/watch?v=')==0) {
+        var video = sporocilo.substr(sporocilo.indexOf('v=') + 2, sporocilo.length); //najde ta v= v http 
+        //naslovu in preskoci ta dva znaka in vzame ven tist string, ki potem sledi
+        $('#sporocila').append('<iframe src="https://www.youtube.com/embed/' + video + '" allowfullscreen></iframe>');
+      }
     }
   }
 
@@ -93,6 +100,7 @@ $(document).ready(function() {
 
   socket.on('sporocilo', function (sporocilo) {
     sporocilo = sporocilo.besedilo;
+
     sporocila = sporocilo.split(" ");
     
     $('#sporocila').append(divElementEnostavniTekst(sporocilo));
@@ -103,6 +111,11 @@ $(document).ready(function() {
         $('#sporocila').scrollTop($('#sporocila').prop('scrollHeight'));
         $('#sporocila').append('<img src="'+ sporocilo + '">');
       } 
+      if (sporocilo.indexOf('https://www.youtube.com/watch?v=')==0) {
+        var video = sporocilo.substr(sporocilo.indexOf('v=') + 2, sporocilo.length); //najde ta v= v http 
+        //naslovu in preskoci ta dva znaka in vzame ven tist string, ki potem sledi
+        $('#sporocila').append('<iframe src="https://www.youtube.com/embed/' + video + '" allowfullscreen></iframe>');
+      }
     }
     
   });
