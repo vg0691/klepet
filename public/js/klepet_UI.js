@@ -1,6 +1,11 @@
+<<<<<<< HEAD
 //var pobarvaniUporabniki = [];
 
 function divElementEnostavniTekst(sporocilo, barva) {
+=======
+
+function divElementEnostavniTekst(sporocilo) {
+>>>>>>> dregljaj
   var jeSmesko = sporocilo.indexOf('http://sandbox.lavbic.net/teaching/OIS/gradivo/') > -1;
   if (jeSmesko) {
     sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace('&lt;img', '<img').replace('png\' /&gt;', 'png\' />');
@@ -158,7 +163,17 @@ $(document).ready(function() {
     });
   });
   
-  //$('seznam-uporabnikov').css('cursor','crosshair');
+  //to vse se dogaja samo na kanalu dregljaj --> prejemnik dregljaja mora biti pridruzen temu kanalu, ce ne, dregljaja ne bo prejel
+  socket.on('dregljaj', function(dregljaj) {
+    //console.log("ablee", dregljaj);
+    //if (trenutniKanal == "dregljaj" /*true*/) {
+      $('#vsebina').jrumble();
+      $('#vsebina').trigger('startRumble');
+      setTimeout(function(){$('#vsebina').trigger('stopRumble');}, 1500);
+    //} 
+      
+  });
+
 
   setInterval(function() {
     socket.emit('kanali');
